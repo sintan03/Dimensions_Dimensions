@@ -43,7 +43,7 @@ button {
   transition: all 0.2s ease;
 
   border-radius: 6px;  /* ← ここ重要 */
-  width: 160px;        /* ← ここ重要 */
+  width: 240px;        /* ← ここ重要 */
 }
 
 button:hover {
