@@ -13,11 +13,8 @@ body {
   font-size: 40px;
   font-weight: bold;
   margin: 10px 0;
+  font-family: "Courier New", monospace;
 }
-
-border-radius: 6px;
-width: 160px;
-font-family: monospace;
 
 .tabs {
   margin: 20px 0;
@@ -44,23 +41,23 @@ button {
   font-family: "Courier New", monospace;
   cursor: pointer;
   transition: all 0.2s ease;
+
+  border-radius: 6px;  /* ← ここ重要 */
+  width: 160px;        /* ← ここ重要 */
 }
 
-/* ホバー */
 button:hover {
   background: #222;
   border-color: #888;
 }
 
-/* 押したとき */
 button:active {
   transform: scale(0.95);
 }
 
 .dimension-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
   background: #1b1b1b;
   margin: 10px auto;
   padding: 10px;
@@ -81,13 +78,4 @@ button:active {
 .cannot-buy {
   opacity: 0.4;
   border-color: #444;
-}
-
-.dimension-row {
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
-}
-
-.big-number {
-  font-family: "Courier New", monospace;
 }
