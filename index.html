@@ -7,10 +7,17 @@
 </head>
 <body>
 
+  <button onclick="hardReset()" style="margin-top:20px; background:#400;">
+    HARD RESET
+  </button>
+
+  <button onclick="giveMoney()">+1e10</button>
+
   <div class="top-bar">
     <h1>Dimension Shard</h1>
     <div id="antimatter" class="big-number">10</div>
     <div>
+      <!-- +(0/sec) -->
       +(<span id="persec">0</span>/sec)
     </div>
   </div>
@@ -34,6 +41,7 @@
     <p>Upgrades coming soon...</p>
   </div>
 
+  <script src="https://cdn.jsdelivr.net/npm/break_infinity.js@2/dist/break_infinity.min.js"></script>
   <script src="main.js?=v1.0.0.10"></script>
 </body>
 </html>
