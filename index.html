@@ -2,16 +2,36 @@
 <html>
 <head>
   <meta charset="UTF-8">
-  <title>Dimensions Dimension</title>
+  <title>My Idle Game</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-  <h1>Dimensions Dimension</h1>
-  <div id="antimatter">0</div>
+  <div class="top-bar">
+    <h1>Antimatter</h1>
+    <div id="antimatter" class="big-number">10</div>
+    <div id="persec">(+0/sec)</div>
+  </div>
 
-  <button onclick="buyDimension()">Buy Dimension (Cost: <span id="cost">10</span>)</button>
+  <div class="tabs">
+    <button onclick="openTab('dimensions')">Dimensions</button>
+    <button onclick="openTab('upgrades')">Upgrades</button>
+  </div>
 
-  <script src="main.js?v1.0.0.1"></script>
+  <div id="dimensions" class="tab-content">
+    <div class="dimension-row">
+      <div>Dimension 1</div>
+      <div id="dim1-amount">0</div>
+      <button onclick="buyDimension(1)">
+        Buy (Cost: <span id="dim1-cost">10</span>)
+      </button>
+    </div>
+  </div>
+
+  <div id="upgrades" class="tab-content" style="display:none;">
+    <p>Upgrades coming soon...</p>
+  </div>
+
+  <script src="game.js"></script>
 </body>
 </html>
