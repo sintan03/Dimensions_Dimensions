@@ -34,6 +34,7 @@ function update() {
   document.getElementById("persec").innerText = dimension.toFicxed(1);
 
   document.getElementById("antimatter").innerText = antimatter.toFixed(1);
+  document.getElementById("dim1-amount").innerText = dimension.toFixed(1);
   document.getElementById("dim1-cost").innerText = cost.toFixed(1);
 
   updateButtons();  // ← これを追加
