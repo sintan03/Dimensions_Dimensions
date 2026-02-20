@@ -2,6 +2,12 @@ let antimatter = 10;
 let dimension = 0;
 let cost = 10;
 
+function openTab(name) {
+  document.getElementById("dimensions").style.display = "none";
+  document.getElementById("upgrades").style.display = "none";
+  document.getElementById(name).style.display = "block";
+}
+
 function buyDimension() {
   if (antimatter >= cost) {
     antimatter -= cost;
