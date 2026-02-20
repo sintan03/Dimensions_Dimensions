@@ -31,7 +31,7 @@ function buyDimension() {
 function update() {
   antimatter += dimension * 0.01;
 
-  document.getElementById("persec").innerText = dimension.toFicxed(1);
+  document.getElementById("persec").innerText = dimension.toFixed(1);
 
   document.getElementById("antimatter").innerText = antimatter.toFixed(1);
   document.getElementById("dim1-amount").innerText = dimension.toFixed(1);
