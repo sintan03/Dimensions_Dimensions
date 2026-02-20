@@ -40,4 +40,4 @@ function update() {
   updateButtons();  // ← これを追加
 }
 
-setInterval(update, 10); // 0.1秒ごと更新
+setInterval(update, 50); // 0.1秒ごと更新
