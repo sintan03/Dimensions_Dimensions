@@ -63,7 +63,7 @@ function update() {
   const diff = (now - lastTick) / 1000;
   lastTick = now;
 
-  antimatter += dimension * 0.05 * diff;
+  antimatter += dimension * diff;
 
   document.getElementById("antimatter").innerText = antimatter.toFixed(1);
   document.getElementById("dim1-cost").innerText = cost.toFixed(1);
@@ -74,7 +74,7 @@ function update() {
   updateButtons();  // ← これを追加
 }
 
-setInterval(update, 50); // 0.1秒ごと更新
+setInterval(update, 50); // 0.05秒ごと更新
 setInterval(save, 5000); // 5秒ごとに保存
 
 load();
