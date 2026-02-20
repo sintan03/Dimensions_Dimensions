@@ -24,12 +24,12 @@ function buyDimension() {
   if (antimatter >= cost) {
     antimatter -= cost;
     dimension++;
-    cost *= 1.01;
+    cost += 1;
   }
 }
 
 function update() {
-  antimatter += dimension * 0.01;
+  antimatter += dimension * 0.05;
 
   document.getElementById("persec").innerText = dimension.toFixed(1);
 
