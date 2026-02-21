@@ -1,5 +1,6 @@
 let antimatter;
 let dimensions;
+let dimensionsMulti;
 let costs;
 
 set(10);
@@ -12,6 +13,13 @@ function set(reset) {
     new Decimal(0),
     new Decimal(0),
     new Decimal(0)
+  ];
+
+  dimensionsMulti = [
+    new Decimal(1),
+    new Decimal(1),
+    new Decimal(1),
+    new Decimal(1)
   ];
 
   costs = [
@@ -57,6 +65,7 @@ function save() {
     antimatter: antimatter.toString(),
     dimensions: dimensions.map(d => d.toString()),
     costs: costs.map(c => c.toString()),
+    dimensionsMulti: dimensionsMulti.map(m => m.toString()),
     lastUpdate: Date.now()
   };
 
@@ -70,6 +79,7 @@ function load() {
     antimatter = new Decimal(saveData.antimatter);
     dimensions = saveData.dimensions.map(d => new Decimal(d));
     costs = saveData.costs.map(c => new Decimal(c));
+    dimensionsMulti = saveData.dimensionsMulti.map(m => new Decimal(m));
 
     const offlineTime = (Date.now() - saveData.lastUpdate) / 1000;
 
@@ -80,10 +90,10 @@ function load() {
 
     for (let i = 0; i < steps; i++) {
       for (let j = 3; j > 0; j--) {
-        dimensions[j-1] = dimensions[j-1].add(dimensions[j].mul(dt));
+        dimensionsMulti[j-1] = dimensionsMulti[j-1].add(dimensions[j].mul(dt).mul(0.1).mul(dimensionsMulti[j]));
       }
       offlineGain = offlineGain.add(dimensions[0]).mul(dt);
-      antimatter = antimatter.add(dimensions[0].mul(dt));
+      antimatter = antimatter.add(dimensions[0].mul(dt).mul(dimensionsMulti[0]));
     }
 
     alert(`オフライン中に ${format(offlineGain)} 獲得しました！`);
@@ -123,18 +133,19 @@ function update() {
 
   // 下から順に生産
   for (let i = 3; i > 0; i--) {
-    dimensions[i - 1] = dimensions[i - 1].add(dimensions[i].mul(diff));
+    dimensionsMulti[i-1] = dimensionsMulti[i-1].add(dimensions[i].mul(diff).mul(0.1).mul(dimensionsMulti[i]));
   }
 
   // 最終的に通貨生成
-  antimatter = antimatter.add(dimensions[0].mul(diff));
+  antimatter = antimatter.add(dimensions[0].mul(diff).mul(dimensionsMulti[0]));
 
   document.getElementById("antimatter").innerText = format(antimatter);
-  document.getElementById("persec").innerText = format(dimensions[0]);
+  document.getElementById("persec").innerText = format(dimensions[0].mul(dimensionsMulti[0]));
 
   for (let i = 0; i < 4; i++) {
-    document.getElementById("dim" + (i + 1) + "-amount").innerText = format(dimensions[i]);
-    document.getElementById("dim" + (i + 1) + "-cost").innerText = format(costs[i]);
+    document.getElementById("dim" + (i+1) + "-amount").innerText = format(dimensions[i]);
+    document.getElementById("dim" + (i+1) + "-cost").innerText = format(costs[i]);
+    document.getElementById("dim" + (i+1) + "-multi").innerText = format(dimensionsMulti[i]);
   }
 
   updateButtons();  // ← これを追加

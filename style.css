@@ -42,8 +42,10 @@ button {
   cursor: pointer;
   transition: all 0.2s ease;
 
-  border-radius: 6px;  /* ← ここ重要 */
-  width: 160px;        /* ← ここ重要 */
+  border-radius: 6px;
+  /* ← ここ重要 */
+  width: 240px;
+  /* ← ここ重要 */
   white-space: nowrap;
 }
 
@@ -58,12 +60,16 @@ button:active {
 
 .dimension-row {
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
   background: #1b1b1b;
   margin: 10px auto;
   padding: 10px;
-  width: 600px;
+  width: 1000px;
   border: 1px solid #333;
+  
+  height: 40px;
+  line-height: 40px;
+  text-align: center;
 }
 
 .can-buy {
@@ -72,8 +78,13 @@ button:active {
 }
 
 @keyframes glow {
-  from { box-shadow: 0 0 5px #00ffcc; }
-  to { box-shadow: 0 0 20px #00ffcc; }
+  from {
+    box-shadow: 0 0 5px #00ffcc;
+  }
+
+  to {
+    box-shadow: 0 0 20px #00ffcc;
+  }
 }
 
 .cannot-buy {
