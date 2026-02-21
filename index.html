@@ -1,10 +1,12 @@
 <!DOCTYPE html>
 <html>
+
 <head>
   <meta charset="UTF-8">
   <title>Dimensions Dimension</title>
   <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
 
   <button onclick="hardReset()" style="margin-top:20px; background:#400;">
@@ -31,9 +33,33 @@
     <div class="dimension-row">
       <div>Dimension 1</div>
       <div id="dim1-amount">0</div>
-        <button id="dim1-btn" onclick="buyDimension(1)">
-          Buy (Cost: <span id="dim1-cost">10</span>)
-        </button>
+      <button id="dim1-btn" onclick="buyDimension(1)">
+        Buy (Cost: <span id="dim1-cost">10</span>)
+      </button>
+    </div>
+    
+    <div class="dimension-row">
+      <div>Dimension 2</div>
+      <div id="dim2-amount">0</div>
+      <button id="dim2-btn" onclick="buyDimension(2)">
+        Buy (Cost: <span id="dim2-cost">100</span>)
+      </button>
+    </div>
+
+    <div class="dimension-row">
+      <div>Dimension 3</div>
+      <div id="dim3-amount">0</div>
+      <button id="dim3-btn" onclick="buyDimension(3)">
+        Buy (Cost: <span id="dim3-cost">1e4</span>)
+      </button>
+    </div>
+
+    <div class="dimension-row">
+      <div>Dimension 4</div>
+      <div id="dim4-amount">0</div>
+      <button id="dim4-btn" onclick="buyDimension(4)">
+        Buy (Cost: <span id="dim4-cost">1e6</span>)
+      </button>
     </div>
   </div>
 
@@ -44,4 +70,5 @@
   <script src="https://cdn.jsdelivr.net/npm/break_infinity.js@2/dist/break_infinity.min.js"></script>
   <script src="main.js?=v1.0.0.10"></script>
 </body>
+
 </html>

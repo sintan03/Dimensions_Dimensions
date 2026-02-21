@@ -1,6 +1,26 @@
-let antimatter = new Decimal(10);
-let dimension = new Decimal(0);
-let cost = new Decimal(10);
+let antimatter;
+let dimensions;
+let costs;
+
+set(10);
+
+function set(reset) {
+  antimatter = new Decimal(reset);
+
+  dimensions = [
+    new Decimal(0),
+    new Decimal(0),
+    new Decimal(0),
+    new Decimal(0)
+  ];
+
+  costs = [
+    new Decimal(10),
+    new Decimal(100),
+    new Decimal(1e4),
+    new Decimal(1e6)
+  ];
+}
 
 function openTab(name) {
   document.getElementById("dimensions").style.display = "none";
@@ -9,30 +29,34 @@ function openTab(name) {
 }
 
 function updateButtons() {
-  const btn = document.getElementById("dim1-btn");
+  for (let i = 0; i < 4; i++) {
+    const btn = document.getElementById("dim" + (i + 1) + "-btn");
 
-  if (antimatter.gte(cost)) {
-    btn.classList.add("can-buy");
-    btn.classList.remove("cannot-buy");
-  } else {
-    btn.classList.add("cannot-buy");
-    btn.classList.remove("can-buy");
+    if (antimatter.gte(costs[i])) {
+      btn.classList.add("can-buy");
+      btn.classList.remove("cannot-buy");
+    } else {
+      btn.classList.add("cannot-buy");
+      btn.classList.remove("can-buy");
+    }
   }
 }
 
-function buyDimension() {
-  if (antimatter.gte(cost)) {
-  antimatter = antimatter.sub(cost);
-  dimension = dimension.add(1);
-  cost = cost.mul(1.15);
+function buyDimension(n) {
+  const i = n - 1;
+
+  if (antimatter.gte(costs[i])) {
+    antimatter = antimatter.sub(costs[i]);
+    dimensions[i] = dimensions[i].add(1);
+    costs[i] = costs[i].mul(1.15);
   }
 }
 
 function save() {
   const saveData = {
     antimatter: antimatter.toString(),
-    dimension: dimension.toString(),
-    cost: cost.toString(),
+    dimensions: dimensions.map(d => d.toString()),
+    costs: costs.map(c => c.toString()),
     lastUpdate: Date.now()
   };
 
@@ -44,15 +68,25 @@ function load() {
 
   if (saveData) {
     antimatter = new Decimal(saveData.antimatter);
-    dimension = new Decimal(saveData.dimension);
-    cost = new Decimal(saveData.cost);
+    dimensions = saveData.dimensions.map(d => new Decimal(d));
+    costs = saveData.costs.map(c => new Decimal(c));
 
     const offlineTime = (Date.now() - saveData.lastUpdate) / 1000;
 
-    const offlineGain = dimension * 0.1 * offlineTime;
-    antimatter = antimatter.add(offlineGain);
+    const steps = Math.min(offlineTime * 20, 20000);
+    const dt = new Decimal(offlineTime).div(steps);
 
-    alert("オフライン中に +" + offlineGain.toFixed(1) + " 獲得しました！");
+    let offlineGain = new Decimal(0);
+
+    for (let i = 0; i < steps; i++) {
+      for (let j = 3; j > 0; j--) {
+        dimensions[j-1] = dimensions[j-1].add(dimensions[j].mul(dt));
+      }
+      offlineGain = offlineGain.add(dimensions[0]).mul(dt);
+      antimatter = antimatter.add(dimensions[0].mul(dt));
+    }
+
+    alert(`オフライン中に ${format(offlineGain)} 獲得しました！`);
   }
 }
 
@@ -63,9 +97,7 @@ function hardReset() {
 
   localStorage.removeItem("save");
 
-  antimatter = new Decimal(10);
-  dimension = new Decimal(0);
-  cost = new Decimal(10);
+  set(10);
 
   update();
 }
@@ -89,12 +121,21 @@ function update() {
   const diff = (now - lastTick) / 1000;
   lastTick = now;
 
-  antimatter = antimatter.add(dimension.mul(diff));
+  // 下から順に生産
+  for (let i = 3; i > 0; i--) {
+    dimensions[i - 1] = dimensions[i - 1].add(dimensions[i].mul(diff));
+  }
+
+  // 最終的に通貨生成
+  antimatter = antimatter.add(dimensions[0].mul(diff));
 
   document.getElementById("antimatter").innerText = format(antimatter);
-  document.getElementById("dim1-cost").innerText = format(cost);
-  document.getElementById("persec").innerText = format(dimension);
-  document.getElementById("dim1-amount").innerText = format(dimension);
+  document.getElementById("persec").innerText = format(dimensions[0]);
+
+  for (let i = 0; i < 4; i++) {
+    document.getElementById("dim" + (i + 1) + "-amount").innerText = format(dimensions[i]);
+    document.getElementById("dim" + (i + 1) + "-cost").innerText = format(costs[i]);
+  }
 
   updateButtons();  // ← これを追加
 }
