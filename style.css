@@ -72,11 +72,28 @@ button:active {
   text-align: center;
 }
 
+.upgrades {
+  margin: 20px 0;
+  font-size: 14px;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+}
+
+.upgrades button {
+  background: #222;
+  color: white;
+  border: 1px solid #444;
+  padding: 20px 10px;
+  margin: 5px;
+  cursor: pointer;
+  width: 300px;
+  font-size: 14px;
+}
+
 .can-buy {
   background: #060;
 }
 
- /*
+/*
 @keyframes glow {
   from {
     box-shadow: 0 0 5px #00ffcc;

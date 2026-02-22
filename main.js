@@ -2,6 +2,9 @@ let antimatter;
 let dimensions;
 let dimensionsMulti;
 let costs;
+let costups;
+
+let upgrades;
 
 set(10);
 
@@ -28,6 +31,21 @@ function set(reset) {
     new Decimal(1e4),
     new Decimal(1e6)
   ];
+
+  costups = [
+    new Decimal(1.1),
+    new Decimal(1.2),
+    new Decimal(1.4),
+    new Decimal(1.8)
+  ];
+
+  upgrades = [
+    {
+      effect: new Decimal(1),
+      cost: new Decimal(100),
+      costup: new Decimal(10)
+    }
+  ];
 }
 
 function openTab(name) {
@@ -48,6 +66,16 @@ function updateButtons() {
       btn.classList.remove("can-buy");
     }
   }
+
+  const btn = document.getElementById("upgrade" + (0 + 1) + "-btn");
+
+  if (antimatter.gte(upgrades[0]["cost"])) {
+    btn.classList.add("can-buy");
+    btn.classList.remove("cannot-buy");
+  } else {
+    btn.classList.add("cannot-buy");
+    btn.classList.remove("can-buy");
+  }
 }
 
 function buyDimension(n) {
@@ -56,7 +84,15 @@ function buyDimension(n) {
   if (antimatter.gte(costs[i])) {
     antimatter = antimatter.sub(costs[i]);
     dimensions[i] = dimensions[i].add(1);
-    costs[i] = costs[i].mul(1.15);
+    costs[i] = costs[i].mul(costups[i]);
+  }
+}
+
+function buyUpgrade(i) {
+  if (antimatter.gte(upgrades[i]["cost"])) {
+    antimatter = antimatter.sub(upgrades[i]["cost"]);
+    upgrades[i]["effect"] = upgrades[i]["effect"].mul(2);
+    upgrades[i]["cost"] = upgrades[i]["cost"].mul(upgrades[i]["costup"])
   }
 }
 
@@ -90,7 +126,7 @@ function load() {
 
     for (let i = 0; i < steps; i++) {
       for (let j = 3; j > 0; j--) {
-        dimensionsMulti[j-1] = dimensionsMulti[j-1].add(dimensions[j].mul(dt).mul(0.1).mul(dimensionsMulti[j]));
+        dimensionsMulti[j - 1] = dimensionsMulti[j - 1].add(dimensions[j].mul(dt).mul(0.1).mul(dimensionsMulti[j]));
       }
       offlineGain = offlineGain.add(dimensions[0].mul(dt).mul(dimensionsMulti[0]));
       antimatter = antimatter.add(dimensions[0].mul(dt).mul(dimensionsMulti[0]));
@@ -132,21 +168,28 @@ function update() {
   lastTick = now;
 
   // 下から順に生産
-  for (let i = 3; i > 0; i--) {
-    dimensionsMulti[i-1] = dimensionsMulti[i-1].add(dimensions[i].mul(diff).mul(0.1).mul(dimensionsMulti[i]));
-  }
+  dimensionsMulti[2] = dimensionsMulti[2].add(dimensions[3].mul(diff).mul(0.1).mul(dimensionsMulti[3]));
+  dimensionsMulti[1] = dimensionsMulti[1].add(dimensions[2].mul(diff).mul(0.1).mul(dimensionsMulti[2]));
+  dimensionsMulti[0] = dimensionsMulti[0].add(dimensions[1].mul(diff).mul(0.1).mul(dimensionsMulti[1]));
 
   // 最終的に通貨生成
-  antimatter = antimatter.add(dimensions[0].mul(diff).mul(dimensionsMulti[0]));
+  antimatter = antimatter.add(dimensions[0].mul(diff).mul(dimensionsMulti[0]).mul(upgrades[0]["effect"]));
 
   document.getElementById("antimatter").innerText = format(antimatter);
-  document.getElementById("persec").innerText = format(dimensions[0].mul(dimensionsMulti[0]));
+  document.getElementById("persec").innerText = format(dimensions[0].mul(dimensionsMulti[0]).mul(upgrades[0]["effect"]));
 
   for (let i = 0; i < 4; i++) {
-    document.getElementById("dim" + (i+1) + "-amount").innerText = format(dimensions[i]);
-    document.getElementById("dim" + (i+1) + "-cost").innerText = format(costs[i]);
-    document.getElementById("dim" + (i+1) + "-multi").innerText = format(dimensionsMulti[i]);
+    document.getElementById("dim" + (i + 1) + "-amount").innerText = format(dimensions[i]);
+    document.getElementById("dim" + (i + 1) + "-cost").innerText = format(costs[i]);
+    if (i == 0) {
+      document.getElementById("dim" + (i + 1) + "-multi").innerText = format(dimensionsMulti[i].mul(upgrades[0]["effect"]));
+    } else {
+      document.getElementById("dim" + (i + 1) + "-multi").innerText = format(dimensionsMulti[i]);
+    }
   }
+
+  document.getElementById("upgrade" + (0 + 1) + "-cost").innerText = format(upgrades[0]["cost"]);
+  document.getElementById("upgrade" + (0 + 1) + "-effect").innerText = format(upgrades[0]["effect"]);
 
   updateButtons();  // ← これを追加
 }
