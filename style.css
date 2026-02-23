@@ -8,6 +8,14 @@ body {
 
 .top-bar {
   padding: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 40px;
+}
+
+.h1 {
+  font-size: 32px;
 }
 
 .big-number {
